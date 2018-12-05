@@ -21,19 +21,17 @@ void sameVTIVolumeAndVTKMesh(const Eigen::Matrix<float,Eigen::Dynamic,1> &volume
 	//volumeVTK->SetOrigin(0,0,0);
 	volumeVTK->SetSpacing(1.0/dim[0]*scale,1.0/dim[1]*scale,1.0/dim[2]*scale);
 	volumeVTK->SetOrigin(translate(0),translate(1),translate(2));
-	volumeVTK->SetNumberOfScalarComponents(1);
-	volumeVTK->SetScalarTypeToFloat();
-	volumeVTK->AllocateScalars();
+	volumeVTK->AllocateScalars(VTK_FLOAT, 1);
 	float *ptr=(float*)volumeVTK->GetScalarPointer();
 	memcpy(ptr,volume.data(),dim[0]*dim[1]*dim[2]*sizeof(float));
 
 	vtkSmartPointer<vtkXMLImageDataWriter> imageWriter=vtkSmartPointer<vtkXMLImageDataWriter>::New();
 	imageWriter->SetFileName(volumeFileName.c_str());
-	imageWriter->SetInputConnection(volumeVTK->GetProducerPort());
+	imageWriter->SetInputData(volumeVTK);
 	imageWriter->Write();
 
 	vtkSmartPointer<vtkMarchingCubes> mc=vtkSmartPointer<vtkMarchingCubes>::New();
-	mc->SetInput(volumeVTK);
+	mc->SetInputData(volumeVTK);
 	mc->ComputeNormalsOn();
 	mc->SetValue(0,0.0);
 

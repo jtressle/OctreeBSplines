@@ -8,7 +8,7 @@ message(${CMAKE_MODULE_PATH})
 find_package(Eigen3 3.3.0 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
-find_package(VTK 5.8 REQUIRED)
+find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 
 find_package(FLANN 1.8.4 REQUIRED)
@@ -23,4 +23,4 @@ file(GLOB OctreeBspline_SRC
 
 add_executable(OctreeBspline ${OctreeBspline_SRC})
 
-target_link_libraries(OctreeBspline ${VTK_LIBRARIES} ${FLANN_LIBRARIES})
+target_link_libraries(OctreeBspline ${VTK_LIBRARIES} ${FLANN_LIBRARIES} -fopenmp)
